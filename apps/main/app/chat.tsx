@@ -173,7 +173,7 @@ export default function ChatScreen() {
                 ))}
               </ScrollView>
 
-              <View style={styles.inputContainer}>
+              <View style={[styles.inputContainer, { paddingBottom: 12 + insets.bottom }]}>
                 <TouchableOpacity
                   style={styles.attachButton}
                   onPress={() => setShowAttachmentOptions(!showAttachmentOptions)}
@@ -251,7 +251,7 @@ export default function ChatScreen() {
 
         {/* Attachment Options */}
         {showAttachmentOptions && (
-          <View style={styles.attachmentOptions}>
+          <View style={[styles.attachmentOptions, { bottom: 70 + insets.bottom }]}>
             {attachmentOptions.map((option) => (
               <TouchableOpacity
                 key={option.id}
