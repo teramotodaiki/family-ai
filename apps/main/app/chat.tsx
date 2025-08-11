@@ -22,6 +22,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { postJson } from '../src/lib/request';
 
 interface Message {
   id: string;
@@ -44,6 +45,7 @@ export default function ChatScreen() {
   const [selectedModel, setSelectedModel] = useState('GPT-5');
   const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [sending, setSending] = useState(false);
   const sidebarAnimation = useSharedValue(0);
 
   const suggestions: Suggestion[] = [
@@ -192,16 +194,86 @@ export default function ChatScreen() {
 
                 <TouchableOpacity 
                   style={styles.sendButton}
-                  onPress={() => {
-                    if (inputText.trim()) {
-                      const newMessage: Message = {
-                        id: Date.now().toString(),
-                        text: inputText,
-                        isUser: true,
+                  disabled={sending || !inputText.trim()}
+                  onPress={async () => {
+                    const text = inputText.trim();
+                    if (!text || sending) return;
+
+                    const userMessage: Message = {
+                      id: Date.now().toString(),
+                      text,
+                      isUser: true,
+                      timestamp: new Date(),
+                    };
+
+                    const nextMessages = [...messages, userMessage];
+                    setMessages(nextMessages);
+                    setInputText('');
+
+                    const apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+                    if (!apiKey) {
+                      const errorReply: Message = {
+                        id: (Date.now() + 1).toString(),
+                        text: 'APIキーが設定されていません。EXPO_PUBLIC_OPENAI_API_KEY を設定してください。',
+                        isUser: false,
                         timestamp: new Date(),
                       };
-                      setMessages([...messages, newMessage]);
-                      setInputText('');
+                      setMessages((prev) => [...prev, errorReply]);
+                      return;
+                    }
+
+                    setSending(true);
+                    try {
+                      const openAiMessages = [
+                        {
+                          role: 'system',
+                          content:
+                            'You are a concise, kind assistant for families with kids. Keep answers short and safe.',
+                        },
+                        ...nextMessages.map((m) => ({
+                          role: m.isUser ? 'user' : 'assistant',
+                          content: m.text,
+                        })),
+                      ];
+
+                      type ChatCompletionResponse = {
+                        choices?: { message?: { content?: string } }[];
+                      };
+
+                      const data = await postJson<
+                        { model: string; messages: { role: string; content: string }[]; max_tokens: number; temperature: number },
+                        ChatCompletionResponse
+                      >(
+                        'https://api.openai.com/v1/chat/completions',
+                        {
+                          model: 'gpt-4o-mini',
+                          messages: openAiMessages,
+                          max_tokens: 256,
+                          temperature: 0.7,
+                        },
+                        {
+                          Authorization: `Bearer ${apiKey}`,
+                        }
+                      );
+
+                      const content = (data.choices?.[0]?.message?.content || '').trim();
+                      const assistantMessage: Message = {
+                        id: (Date.now() + 2).toString(),
+                        text: content || '…',
+                        isUser: false,
+                        timestamp: new Date(),
+                      };
+                      setMessages((prev) => [...prev, assistantMessage]);
+                    } catch (e) {
+                      const errorReply: Message = {
+                        id: (Date.now() + 3).toString(),
+                        text: 'ネットワークに問題があります。時間をおいて再試行してください。',
+                        isUser: false,
+                        timestamp: new Date(),
+                      };
+                      setMessages((prev) => [...prev, errorReply]);
+                    } finally {
+                      setSending(false);
                     }
                   }}
                 >
