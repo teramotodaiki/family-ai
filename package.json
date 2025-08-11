@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "dev:mobile": "turbo run dev --filter=mobile",
+    "dev:main": "turbo run dev --filter=main",
     "build": "turbo run build",
     "clean": "turbo run clean"
   },
