@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      おうちAI — 家族で使えるAI。招待するだけで、子どももすぐ使える。
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="おうちAIは、家族で分け合えるAI。親が買って招待するだけ。子どもはアカウント不要。答えではなくヒントで学び、危ない時だけ“ぼかし通知”が届きます。"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#2E6FE3" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="おうちAI — 家族で使えるAI" />
+    <meta
+      property="og:description"
+      content="家族で分け合えるAI。招待するだけで、子どももすぐ使える。危ない時だけ、そっと知らせる。"
+    />
+    <meta property="og:image" content="https://example.com/ogp_ouchi_ai.jpg" />
+    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:site_name" content="おうちAI" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="おうちAI — 家族で使えるAI" />
+    <meta
+      name="twitter:description"
+      content="家族で分け合えるAI。招待するだけで、子どももすぐ使える。危ない時だけ、そっと知らせる。"
+    />
+    <meta name="twitter:image" content="https://example.com/ogp_ouchi_ai.jpg" />
+    <!-- Favicon (差し替え) -->
+    <link rel="icon" href="/favicon.ico" />
+    <!-- 構造化データ（SoftwareApplication） -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "おうちAI",
+        "alternateName": "OUCHI AI",
+        "applicationCategory": "FamilyApplication",
+        "operatingSystem": "iOS, Android",
+        "description": "家族で分け合えるAI。招待するだけで、子どももすぐ使える。危ない時だけ、そっと知らせる。",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "JPY",
+          "url": "https://example.com/"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "おうちAI"
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #0b1020;
+        --muted: #5b6477;
+        --brand: #2e6fe3;
+        --brand-ink: #163b8f;
+        --accent: #f5b500;
+        --card: #f7f9fc;
+        --line: #e5e9f2;
+        --ok: #1ea672;
+        --danger: #d7263d;
+        --radius: 14px;
+        --shadow: 0 8px 30px rgba(22, 33, 66, 0.08);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0e1220;
+          --fg: #e9ecf5;
+          --muted: #a9b0c0;
+          --brand: #6fa0ff;
+          --brand-ink: #bfd2ff;
+          --accent: #ffd36a;
+          --card: #12172a;
+          --line: #232c45;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic",
+          Meiryo, sans-serif;
+        color: var(--fg);
+        background: var(--bg);
+        letter-spacing: 0.02em;
+      }
+      a {
+        color: var(--brand);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .container {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        background: color-mix(in oklab, var(--bg) 92%, transparent);
+        backdrop-filter: saturate(180%) blur(6px);
+        border-bottom: 1px solid var(--line);
+        z-index: 50;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .logo {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: radial-gradient(
+            40% 40% at 50% 50%,
+            color-mix(in oklab, var(--accent), white 30%) 0 60%,
+            transparent 61%
+          ),
+          linear-gradient(
+            135deg,
+            var(--brand) 0%,
+            color-mix(in oklab, var(--brand), black 10%) 100%
+          );
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+      }
+      .brand b {
+        font-weight: 700;
+      }
+      .nav a.btn {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: var(--brand);
+        color: #fff;
+        border: 1px solid color-mix(in oklab, var(--brand), black 10%);
+        box-shadow: var(--shadow);
+      }
+      .nav a.btn:hover {
+        background: color-mix(in oklab, var(--brand), black 5%);
+      }
+      .hero {
+        padding: 72px 0 36px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 28px;
+        align-items: center;
+      }
+      @media (max-width: 920px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .badge {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 14px;
+      }
+      h1 {
+        font-size: clamp(28px, 5vw, 44px);
+        line-height: 1.2;
+        margin: 16px 0 10px;
+      }
+      .lead {
+        font-size: 18px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+      .cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+      .cta .ghost {
+        background: transparent;
+        color: var(--brand);
+        border: 1px solid var(--brand);
+        box-shadow: none;
+      }
+      .phone {
+        aspect-ratio: 9/19;
+        border-radius: 28px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      .phone img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 28px;
+      }
+      .trust {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .section {
+        padding: 52px 0;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+      @media (max-width: 920px) {
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 22px;
+        box-shadow: var(--shadow);
+        height: 100%;
+      }
+      .k {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .k .ic {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        display: grid;
+        place-items: center;
+        color: var(--brand);
+      }
+      h2 {
+        font-size: 26px;
+        margin: 0 0 18px;
+      }
+      h3 {
+        font-size: 18px;
+        margin: 0 0 8px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .how {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      @media (max-width: 920px) {
+        .how {
+          grid-template-columns: 1fr;
+        }
+      }
+      .step {
+        display: flex;
+        gap: 14px;
+      }
+      .num {
+        flex: 0 0 32px;
+        height: 32px;
+        border-radius: 999px;
+        background: var(--brand);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+      }
+      .note {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .pricing {
+        display: grid;
+        grid-template-columns: 1fr 0.9fr;
+        gap: 18px;
+        align-items: stretch;
+      }
+      @media (max-width: 920px) {
+        .pricing {
+          grid-template-columns: 1fr;
+        }
+      }
+      .price {
+        padding: 24px;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: linear-gradient(
+          180deg,
+          var(--card),
+          color-mix(in oklab, var(--card), white 4%)
+        );
+      }
+      .bul {
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .bul li {
+        margin: 10px 0;
+        padding-left: 26px;
+        position: relative;
+      }
+      .bul li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.5em;
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        background: var(--ok);
+      }
+      .faq details {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: var(--bg);
+      }
+      .faq details + details {
+        margin-top: 10px;
+      }
+      .footer {
+        padding: 36px 0;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .legal {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border: 1px dashed var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+      }
+      .storebtns img {
+        height: 44px;
+      }
+      .disclaimer {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container nav" aria-label="メインナビ">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <b>おうちAI</b>
+        </div>
+        <nav class="hide-on-mobile" aria-label="セクション">
+          <a href="#features">特長</a>
+          <span aria-hidden="true">・</span>
+          <a href="#how">はじめかた</a>
+          <span aria-hidden="true">・</span>
+          <a href="#pricing">プラン</a>
+          <span aria-hidden="true">・</span>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a
+          class="btn"
+          href="#download"
+          role="button"
+          aria-label="今すぐはじめる"
+          >今すぐはじめる</a
+        >
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <span class="badge" aria-label="製品の要約"
+              >家族で使えるAI ・ ヒントで学べる ・ ぼかし通知</span
+            >
+            <h1>家族で使えるAI。<br />招待するだけで、子どももすぐ使える。</h1>
+            <p class="lead">
+              親が買って、家族に配るだけ。答えではなく<strong>ヒント</strong>で自分で解ける設計。危ない時だけ<strong>“ぼかし通知”</strong>が届きます。アカウント管理は親だけ。子どもはサインアップ不要。
+            </p>
+            <div class="cta">
+              <a class="btn" href="#download">ダウンロード</a>
+              <a class="btn ghost" href="#how">はじめかたを見る</a>
+            </div>
+            <div class="trust">
+              <span class="pill">子アプリ：外部リンク・課金なし</span>
+              <span class="pill">iOS/Android 両対応</span>
+            </div>
+          </div>
+          <div class="phone" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1602506436857-0c2c9f3a2e1a?q=80&w=1200&auto=format&fit=crop"
+              alt=""
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="section">
+        <div class="container">
+          <h2>おうちAIの特長</h2>
+          <div class="grid-3" role="list">
+            <article class="card k" role="listitem">
+              <div class="ic" aria-hidden="true">🏠</div>
+              <div>
+                <h3>家族で分け合える</h3>
+                <p class="muted">
+                  1つの契約を家族で。回数は家族プール、子どもごとに最低回数を確保。上の子が使い切る問題を防ぎます。
+                </p>
+              </div>
+            </article>
+            <article class="card k" role="listitem">
+              <div class="ic" aria-hidden="true">🧭</div>
+              <div>
+                <h3>ヒントで学べる</h3>
+                <p class="muted">
+                  答えをそのまま出さず、段階的なヒントで導きます。明日用の復習ヒントも自動で用意できます。
+                </p>
+              </div>
+            </article>
+            <article class="card k" role="listitem">
+              <div class="ic" aria-hidden="true">🫧</div>
+              <div>
+                <h3>“ぼかし通知”で安心</h3>
+                <p class="muted">
+                  危険・滞り・達成だけを要約して親に通知。本文は既定で見えません。プライバシーと見守りの両立。
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section id="how" class="section">
+        <div class="container">
+          <h2>はじめかた（親用）</h2>
+          <div class="how">
+            <div class="card step">
+              <div class="num">1</div>
+              <div>
+                <h3>アプリを入れて「はじめる」</h3>
+                <p class="muted">
+                  親アプリで世帯を作成。子アプリは別アプリです。
+                </p>
+              </div>
+            </div>
+            <div class="card step">
+              <div class="num">2</div>
+              <div>
+                <h3>招待コードを発行</h3>
+                <p class="muted">
+                  QRまたは6桁コードを表示。コードは毎回ランダム生成。
+                </p>
+              </div>
+            </div>
+            <div class="card step">
+              <div class="num">3</div>
+              <div>
+                <h3>子端末でコード入力</h3>
+                <p class="muted">
+                  子アプリの最初の画面で入力。サインアップは不要。
+                </p>
+              </div>
+            </div>
+            <div class="card step">
+              <div class="num">4</div>
+              <div>
+                <h3>親が承認して開始</h3>
+                <p class="muted">
+                  承認後すぐに使えます。危ない時だけ“ぼかし通知”。
+                </p>
+              </div>
+            </div>
+          </div>
+          <p class="note">
+            ※ 「家族で分け合う」は当社の世帯内共有機能です。AppleのFamily
+            Sharing機能とは異なります。
+          </p>
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section id="pricing" class="section">
+        <div class="container pricing">
+          <div class="price">
+            <h2>シンプルな家族プラン</h2>
+            <p class="muted">まずは無料で体験。気に入ったら家族プランへ。</p>
+            <ul class="bul" aria-label="プランの特長">
+              <li>家族プール回数（子ごとに最低回数つき）</li>
+              <li>ヒント学習（段階ヒント／復習ヒント）</li>
+              <li>“ぼかし通知”でプライバシー配慮</li>
+              <li>親の承認で参加・管理</li>
+              <li>iOS/Android 端末混在OK</li>
+            </ul>
+            <div class="cta" style="margin-top: 18px">
+              <a class="btn" href="#download">無料ではじめる</a>
+              <a class="btn ghost" href="#faq">よくある質問</a>
+            </div>
+            <p class="disclaimer">
+              価格・詳細はアプリ内でご案内します。子アプリには外部リンク・課金を置きません。
+            </p>
+          </div>
+          <div class="card">
+            <h3>データの扱いについて</h3>
+            <p class="muted">
+              子どもの会話本文は既定で親には見えません。危険・滞り・達成などのシグナルのみ“ぼかし”で通知します。詳細を開く場合は子どもの同意が必要です。
+            </p>
+            <p class="muted">
+              最新の大規模言語モデル（LLM）を利用します。安全配慮のため、問題のある生成物はアプリ内から通報できます。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Download -->
+      <section id="download" class="section">
+        <div class="container">
+          <h2>ダウンロード</h2>
+          <p class="muted">
+            親アプリとKidsアプリは別アプリです。まずは親アプリから。
+          </p>
+          <div
+            class="storebtns"
+            style="display: flex; gap: 12px; flex-wrap: wrap"
+          >
+            <a href="#" aria-label="App Storeで親アプリを入手"
+              ><img
+                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                alt="App Storeからダウンロード"
+            /></a>
+            <a href="#" aria-label="Google Playで親アプリを入手"
+              ><img
+                src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                alt="Google Playで手に入れよう"
+            /></a>
+          </div>
+          <div style="height: 8px"></div>
+          <div
+            class="storebtns"
+            style="display: flex; gap: 12px; flex-wrap: wrap"
+          >
+            <a href="#" aria-label="App StoreでKidsアプリを入手"
+              ><img
+                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                alt="App Storeからダウンロード"
+            /></a>
+            <a href="#" aria-label="Google PlayでKidsアプリを入手"
+              ><img
+                src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                alt="Google Playで手に入れよう"
+            /></a>
+          </div>
+          <p class="note">
+            ※
+            近日公開。配布前はテストフライト／内部テストリンクに差し替えてください。
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="section">
+        <div class="container">
+          <h2>よくある質問</h2>
+          <div class="faq">
+            <details>
+              <summary>
+                <strong>子どもにアカウントは必要ですか？</strong>
+              </summary>
+              <p class="muted">
+                不要です。親の招待コードを入力し、親が承認すると使えます。
+              </p>
+            </details>
+            <details>
+              <summary><strong>親には何が見えますか？</strong></summary>
+              <p class="muted">
+                危険・滞り・達成などの“ぼかし通知”のみが届きます。本文は既定で見えません。
+              </p>
+            </details>
+            <details>
+              <summary>
+                <strong>端末がiPhoneとAndroidで混在していても大丈夫？</strong>
+              </summary>
+              <p class="muted">
+                問題ありません。親アプリとKidsアプリはどちらのOSにも対応します。
+              </p>
+            </details>
+            <details>
+              <summary><strong>料金は？</strong></summary>
+              <p class="muted">
+                無料でお試し後、家族プランに移行できます。価格はアプリ内でご案内します。
+              </p>
+            </details>
+            <details>
+              <summary><strong>“Family Sharing”と同じですか？</strong></summary>
+              <p class="muted">
+                異なります。当社の「家族で分け合う」はアプリ内の世帯共有機能です。
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div
+          style="
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <div class="brand">
+            <div class="logo" aria-hidden="true"></div>
+            <b>おうちAI</b>
+          </div>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap">
+            <a href="/terms">利用規約</a>
+            <a href="/privacy">プライバシーポリシー</a>
+            <a href="/contact">お問い合わせ</a>
+          </div>
+        </div>
+        <p class="legal">
+          © <span id="y"></span> OUCHI AI. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // 年号自動
+      document.getElementById("y").textContent = new Date().getFullYear();
+      // アコーディオンのアクセシビリティ補助
+      document.querySelectorAll("summary").forEach((s) => {
+        s.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            s.click();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
