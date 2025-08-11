@@ -19,6 +19,7 @@
 - 通信は fetch を使用する。共通ラッパーを定義する。
 - 永続化は expo-secure-store を使用する。機微情報のみを保存する。
 - 依存追加は PR で理由と代替案の比較根拠を明記する。
+ - 注意: `react-native-worklets` は Expo Go に非対応。利用が必要な場合は Custom Dev Client（開発ビルド/EAS Dev Build）でのみ有効化し、Expo Go で動かす段階では導入しない。
 
 ## ディレクトリ構成（モバイル）
 
