@@ -9,7 +9,8 @@
     "dev": "turbo run dev",
     "dev:main": "turbo run dev --filter=main",
     "build": "turbo run build",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "e2e:main": "maestro test -e APP_ID=com.familyai.main apps/main/maestro/flows/chat-send.yaml"
   },
   "devDependencies": {
     "turbo": "2.5.5"

@@ -15,9 +15,11 @@ const config: ExpoConfig = {
     backgroundColor: '#ffffff'
   },
   ios: {
-    supportsTablet: true
+    supportsTablet: true,
+    bundleIdentifier: 'com.familyai.main'
   },
   android: {
+    package: 'com.familyai.main',
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff'

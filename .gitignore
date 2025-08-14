@@ -80,4 +80,9 @@ typings/
 #DynamoDB Local files
 .dynamodb/
 
+# Turborepo
 .turbo
+
+# Ignore generated native projects for Expo Managed
+apps/main/ios/
+apps/main/android/

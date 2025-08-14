@@ -127,19 +127,20 @@ export default function ChatScreen() {
         >
           {/* Custom Header */}
           <View style={[styles.customHeader, { paddingTop: insets.top + 8 }]}>
-            <TouchableOpacity onPress={toggleSidebar} style={styles.headerButton}>
+            <TouchableOpacity onPress={toggleSidebar} style={styles.headerButton} testID="menu-button">
               <Ionicons name="menu" size={24} color="#fff" />
             </TouchableOpacity>
             
             <TouchableOpacity
               style={styles.headerTitle}
               onPress={() => setModelModalVisible(true)}
+              testID="header-title"
             >
               <Text style={styles.headerTitleText}>ChatGPT 5</Text>
               <Ionicons name="chevron-down" size={16} color="#fff" />
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.headerButton}>
+            <TouchableOpacity style={styles.headerButton} testID="refresh-button">
               <Ionicons name="refresh-outline" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
@@ -169,6 +170,8 @@ export default function ChatScreen() {
                       styles.messageBubble,
                       message.isUser ? styles.userMessage : styles.aiMessage,
                     ]}
+                    testID={message.isUser ? 'message-user' : 'message-assistant'}
+                    accessibilityLabel={message.isUser ? 'message-user' : 'message-assistant'}
                   >
                     <Text style={styles.messageText}>{message.text}</Text>
                   </View>
@@ -190,10 +193,14 @@ export default function ChatScreen() {
                   placeholder="質問してみましょう"
                   placeholderTextColor="#666"
                   multiline
+                  testID="chat-input"
+                  accessibilityLabel="chat-input"
                 />
 
                 <TouchableOpacity 
                   style={styles.sendButton}
+                  testID="send-button"
+                  accessibilityLabel="send-button"
                   disabled={sending || !inputText.trim()}
                   onPress={async () => {
                     const text = inputText.trim();

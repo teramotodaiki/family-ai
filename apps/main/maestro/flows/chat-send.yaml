@@ -1,0 +1,49 @@
+appId: ${APP_ID}
+name: Chat send returns a reply
+tags:
+  - e2e
+  - chat
+env:
+  INPUT_TEXT: "こんにちは"
+onFlowStart:
+  - stopApp: {}
+  - clearState: {}
+  - launchApp:
+      appId: ${APP_ID}
+      clearState: true
+      permissions:
+        notifications: allow
+        camera: deny
+        photos: deny
+        microphone: deny
+---
+- extendedWaitUntil:
+    visible:
+      id: "header-title"
+    timeout: 10000
+
+- tapOn:
+    id: "chat-input"
+
+- inputText: ${INPUT_TEXT}
+
+# Try basic keyboard interactions
+- hideKeyboard: {}
+
+- tapOn:
+    id: "send-button"
+
+# Wait for either an assistant message or a specific error text when API key is missing
+- extendedWaitUntil:
+    visible:
+      id: "message-assistant"
+    timeout: 25000
+
+# If API key is not set, confirm the fallback error message appears
+- assertVisible:
+    text: "APIキーが設定されていません"
+    optional: true
+
+# Always confirm at least one assistant bubble exists
+- assertVisible:
+    id: "message-assistant"
