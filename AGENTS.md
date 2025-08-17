@@ -14,12 +14,13 @@
 - iOS を主対象に検証する。
 - TypeScript を厳格設定で使用する。
 - 画面遷移は Expo Router v3 を使用する。
+  - Drawer は `expo-router/drawer` を採用
 - グローバル状態管理は初期段階で導入しない。必要になった時点で最小限のストアを追加する。選定は Jotai を第一候補に固定する。
 - UI ライブラリは導入しない。標準コンポーネントと StyleSheet を使用する。
 - 通信は fetch を使用する。共通ラッパーを定義する。
 - 永続化は expo-secure-store を使用する。機微情報のみを保存する。
 - 依存追加は PR で理由と代替案の比較根拠を明記する。
-- 注意: `react-native-worklets` は Expo Go に非対応。利用が必要な場合は Custom Dev Client（開発ビルド/EAS Dev Build）でのみ有効化し、Expo Go で動かす段階では導入しない。
+- 注意: 現在は Dev Client 前提（Expo Go は使用しない）。`react-native-worklets` は Expo Go には同梱されないため、Dev Client（開発ビルド/EAS Dev Build）でのみ利用する。
 
 ## ディレクトリ構成（モバイル）
 
@@ -28,7 +29,7 @@
 ```
 apps/
   main/
-  kids/
+  kids/  （将来追加予定）
 packages/
   ui/
   ...
@@ -86,6 +87,7 @@ packages/
 
 - ファイルパスの先頭は monorepo ルートからの相対で記述する。
 - 依存追加時は package.json の変更とインストール手順を必ず含める。
+- EAS のビルド/サブミットは `apps/main` で実行し、`apps/main/eas.json` を参照する運用とする。
 
 ## 実装品質チェックリスト
 
