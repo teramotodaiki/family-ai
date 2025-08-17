@@ -3,18 +3,20 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useTheme } from '../src/theme';
 
 export default function Layout() {
+  const { colors } = useTheme();
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={styles.container}>
-        <StatusBar style='light' />
+        <StatusBar style='auto' />
         <Stack
           screenOptions={{
             headerShown: false,
-            headerStyle: { backgroundColor: '#000' },
-            headerTintColor: '#fff',
-            contentStyle: { backgroundColor: '#000' },
+            headerStyle: { backgroundColor: colors.background },
+            headerTintColor: colors.headerTint,
+            contentStyle: { backgroundColor: colors.background },
             headerShadowVisible: false,
           }}
         >

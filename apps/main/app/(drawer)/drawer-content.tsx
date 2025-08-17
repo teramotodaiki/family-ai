@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTheme } from '../../src/theme';
 
 interface Conversation {
   id: string;
@@ -22,6 +23,7 @@ export default function DrawerContent({
   navigation,
 }: DrawerContentComponentProps) {
   const router = useRouter();
+  const { colors } = useTheme();
   const [searchText, setSearchText] = useState('');
   const [conversations] = useState<Conversation[]>([
     { id: '1', title: 'サポート問い合わせ方法', timestamp: '今日' },
@@ -33,23 +35,27 @@ export default function DrawerContent({
   const user = { name: 'Daiki Teramoto', email: '個人アカウント' };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.searchContainer}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <View
+        style={[styles.searchContainer, { backgroundColor: colors.inputBg }]}
+      >
         <Ionicons
           name='search'
           size={20}
-          color='#666'
+          color={colors.muted}
           style={styles.searchIcon}
         />
         <TextInput
-          style={styles.searchInput}
+          style={[styles.searchInput, { color: colors.text }]}
           placeholder='検索'
-          placeholderTextColor='#666'
+          placeholderTextColor={colors.muted}
           value={searchText}
           onChangeText={setSearchText}
         />
         <TouchableOpacity style={styles.newChatButton}>
-          <Ionicons name='create-outline' size={20} color='#fff' />
+          <Ionicons name='create-outline' size={20} color={colors.text} />
         </TouchableOpacity>
       </View>
 
@@ -57,28 +63,43 @@ export default function DrawerContent({
         {conversations.map((conversation) => (
           <TouchableOpacity
             key={conversation.id}
-            style={styles.conversationItem}
+            style={[
+              styles.conversationItem,
+              { borderBottomColor: colors.border },
+            ]}
             onPress={() => {
               router.push('/chat');
               navigation.closeDrawer();
             }}
           >
-            <Text style={styles.conversationTitle}>{conversation.title}</Text>
-            <Text style={styles.conversationTimestamp}>
+            <Text style={[styles.conversationTitle, { color: colors.text }]}>
+              {conversation.title}
+            </Text>
+            <Text
+              style={[styles.conversationTimestamp, { color: colors.muted }]}
+            >
               {conversation.timestamp}
             </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
-      <View style={styles.userSection}>
+      <View style={[styles.userSection, { borderTopColor: colors.border }]}>
         <TouchableOpacity style={styles.userInfo}>
-          <View style={styles.userAvatar}>
-            <Text style={styles.userAvatarText}>D</Text>
+          <View
+            style={[styles.userAvatar, { backgroundColor: colors.surface }]}
+          >
+            <Text style={[styles.userAvatarText, { color: colors.text }]}>
+              D
+            </Text>
           </View>
           <View style={styles.userDetails}>
-            <Text style={styles.userName}>{user.name}</Text>
-            <Text style={styles.userEmail}>{user.email}</Text>
+            <Text style={[styles.userName, { color: colors.text }]}>
+              {user.name}
+            </Text>
+            <Text style={[styles.userEmail, { color: colors.muted }]}>
+              {user.email}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>

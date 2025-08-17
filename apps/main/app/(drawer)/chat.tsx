@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { postJson } from '../../src/lib/request';
+import { useTheme } from '../../src/theme';
 
 interface Message {
   id: string;
@@ -33,6 +34,7 @@ interface Suggestion {
 export default function ChatScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const { colors, theme } = useTheme();
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [modelModalVisible, setModelModalVisible] = useState(false);
@@ -40,6 +42,7 @@ export default function ChatScreen() {
   const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
   const [sending, setSending] = useState(false);
   const emailRef = useRef<TextInput>(null);
+  const sendIconColor = theme === 'dark' ? '#000' : '#fff';
 
   const suggestions: Suggestion[] = [
     { id: '1', text: 'Explain MCP', subtext: 'structured content' },
@@ -63,7 +66,9 @@ export default function ChatScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <Stack.Screen options={{ headerShown: false }} />
 
       <KeyboardAvoidingView
@@ -72,20 +77,30 @@ export default function ChatScreen() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         {/* Header */}
-        <View style={[styles.customHeader, { paddingTop: insets.top + 8 }]}>
+        <View
+          style={[
+            styles.customHeader,
+            {
+              paddingTop: insets.top + 8,
+              backgroundColor: colors.background,
+              borderBottomColor: colors.border,
+            },
+          ]}
+        >
           <TouchableOpacity
             onPress={() => {
-              // In expo-router, the Drawer is a parent navigator of this screen
-              // Ensure we dispatch the action on the parent (Drawer) navigator
-              const parent = navigation.getParent?.();
-              if (parent) {
-                parent.dispatch(DrawerActions.openDrawer());
+              // Target the Drawer navigator by id to avoid unhandled action
+              const drawer = navigation.getParent?.('drawer');
+              if (drawer) {
+                drawer.dispatch(DrawerActions.openDrawer());
+              } else {
+                navigation.dispatch(DrawerActions.openDrawer());
               }
             }}
             style={styles.headerButton}
             testID='menu-button'
           >
-            <Ionicons name='menu' size={24} color='#fff' />
+            <Ionicons name='menu' size={24} color={colors.text} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -93,12 +108,14 @@ export default function ChatScreen() {
             onPress={() => setModelModalVisible(true)}
             testID='header-title'
           >
-            <Text style={styles.headerTitleText}>ChatGPT 5</Text>
-            <Ionicons name='chevron-down' size={16} color='#fff' />
+            <Text style={[styles.headerTitleText, { color: colors.text }]}>
+              ChatGPT 5
+            </Text>
+            <Ionicons name='chevron-down' size={16} color={colors.text} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.headerButton} testID='refresh-button'>
-            <Ionicons name='refresh-outline' size={24} color='#fff' />
+            <Ionicons name='refresh-outline' size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
 
@@ -112,11 +129,21 @@ export default function ChatScreen() {
               {suggestions.map((suggestion) => (
                 <TouchableOpacity
                   key={suggestion.id}
-                  style={styles.suggestionCard}
+                  style={[
+                    styles.suggestionCard,
+                    {
+                      backgroundColor: colors.surface,
+                      borderColor: colors.border,
+                    },
+                  ]}
                   onPress={() => setInputText(suggestion.text)}
                 >
-                  <Text style={styles.suggestionText}>{suggestion.text}</Text>
-                  <Text style={styles.suggestionSubtext}>
+                  <Text style={[styles.suggestionText, { color: colors.text }]}>
+                    {suggestion.text}
+                  </Text>
+                  <Text
+                    style={[styles.suggestionSubtext, { color: colors.muted }]}
+                  >
                     {suggestion.subtext}
                   </Text>
                 </TouchableOpacity>
@@ -129,34 +156,50 @@ export default function ChatScreen() {
               style={[
                 styles.messageBubble,
                 message.isUser ? styles.userMessage : styles.aiMessage,
+                {
+                  backgroundColor: message.isUser
+                    ? colors.bubbleUserBg
+                    : colors.bubbleAiBg,
+                },
               ]}
               testID={message.isUser ? 'message-user' : 'message-assistant'}
               accessibilityLabel={
                 message.isUser ? 'message-user' : 'message-assistant'
               }
             >
-              <Text style={styles.messageText}>{message.text}</Text>
+              <Text style={[styles.messageText, { color: colors.text }]}>
+                {message.text}
+              </Text>
             </View>
           ))}
         </ScrollView>
 
         <View
-          style={[styles.inputContainer, { paddingBottom: 12 + insets.bottom }]}
+          style={[
+            styles.inputContainer,
+            {
+              paddingBottom: 12 + insets.bottom,
+              borderTopColor: colors.border,
+            },
+          ]}
         >
           <TouchableOpacity
-            style={styles.attachButton}
+            style={[styles.attachButton, { backgroundColor: colors.inputBg }]}
             onPress={() => setShowAttachmentOptions(!showAttachmentOptions)}
           >
-            <Ionicons name='add' size={28} color='#fff' />
+            <Ionicons name='add' size={28} color={colors.text} />
           </TouchableOpacity>
 
           <TextInput
             ref={emailRef}
-            style={styles.textInput}
+            style={[
+              styles.textInput,
+              { backgroundColor: colors.inputBg, color: colors.text },
+            ]}
             value={inputText}
             onChangeText={setInputText}
             placeholder='質問してみましょう'
-            placeholderTextColor='#666'
+            placeholderTextColor={colors.muted}
             multiline
             testID='chat-input'
             accessibilityLabel='chat-input'
@@ -164,7 +207,7 @@ export default function ChatScreen() {
           />
 
           <TouchableOpacity
-            style={styles.sendButton}
+            style={[styles.sendButton, { backgroundColor: colors.accent }]}
             testID='send-button'
             accessibilityLabel='send-button'
             disabled={sending || !inputText.trim()}
@@ -257,7 +300,7 @@ export default function ChatScreen() {
               }
             }}
           >
-            <Ionicons name='arrow-up' size={20} color='#000' />
+            <Ionicons name='arrow-up' size={20} color={sendIconColor} />
           </TouchableOpacity>
         </View>
 
@@ -273,20 +316,31 @@ export default function ChatScreen() {
             activeOpacity={1}
             onPress={() => setModelModalVisible(false)}
           >
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>モデルを選択</Text>
+            <View
+              style={[styles.modalContent, { backgroundColor: colors.surface }]}
+            >
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                モデルを選択
+              </Text>
               {models.map((model) => (
                 <TouchableOpacity
                   key={model.id}
-                  style={styles.modelOption}
+                  style={[
+                    styles.modelOption,
+                    { borderTopColor: colors.border },
+                  ]}
                   onPress={() => {
                     setSelectedModel(model.name);
                     setModelModalVisible(false);
                   }}
                 >
                   <View style={styles.modelInfo}>
-                    <Text style={styles.modelName}>{model.name}</Text>
-                    <Text style={styles.modelDescription}>
+                    <Text style={[styles.modelName, { color: colors.text }]}>
+                      {model.name}
+                    </Text>
+                    <Text
+                      style={[styles.modelDescription, { color: colors.muted }]}
+                    >
                       {model.description}
                     </Text>
                   </View>
@@ -302,7 +356,10 @@ export default function ChatScreen() {
         {/* Attachment Options */}
         {showAttachmentOptions && (
           <View
-            style={[styles.attachmentOptions, { bottom: 70 + insets.bottom }]}
+            style={[
+              styles.attachmentOptions,
+              { bottom: 70 + insets.bottom, backgroundColor: colors.surface },
+            ]}
           >
             {attachmentOptions.map((option) => (
               <TouchableOpacity
@@ -311,43 +368,65 @@ export default function ChatScreen() {
                 onPress={() => setShowAttachmentOptions(false)}
               >
                 {option.icon === 'camera' && (
-                  <Ionicons name='camera' size={32} color='#fff' />
+                  <Ionicons name='camera' size={32} color={colors.text} />
                 )}
                 {option.icon === 'circle' && <View style={styles.circleIcon} />}
                 {option.icon === 'list' && (
-                  <Ionicons name='list' size={32} color='#fff' />
+                  <Ionicons name='list' size={32} color={colors.text} />
                 )}
                 {option.label ? (
-                  <Text style={styles.attachmentLabel}>{option.label}</Text>
+                  <Text
+                    style={[styles.attachmentLabel, { color: colors.text }]}
+                  >
+                    {option.label}
+                  </Text>
                 ) : null}
               </TouchableOpacity>
             ))}
             <View style={styles.attachmentActions}>
               <TouchableOpacity style={styles.attachmentActionButton}>
-                <Ionicons name='sunny' size={24} color='#fff' />
-                <Text style={styles.attachmentActionText}>
+                <Ionicons name='sunny' size={24} color={colors.text} />
+                <Text
+                  style={[styles.attachmentActionText, { color: colors.text }]}
+                >
                   より長く思考する
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.attachmentActionButton}>
-                <MaterialIcons name='psychology' size={24} color='#fff' />
-                <Text style={styles.attachmentActionText}>
+                <MaterialIcons
+                  name='psychology'
+                  size={24}
+                  color={colors.text}
+                />
+                <Text
+                  style={[styles.attachmentActionText, { color: colors.text }]}
+                >
                   エージェントモード
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.attachmentActionButton}>
-                <Ionicons name='search' size={24} color='#fff' />
-                <Text style={styles.attachmentActionText}>Deep Research</Text>
+                <Ionicons name='search' size={24} color={colors.text} />
+                <Text
+                  style={[styles.attachmentActionText, { color: colors.text }]}
+                >
+                  Deep Research
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.attachmentActionButton}>
-                <Ionicons name='book' size={24} color='#fff' />
-                <Text style={styles.attachmentActionText}>
+                <Ionicons name='book' size={24} color={colors.text} />
+                <Text
+                  style={[styles.attachmentActionText, { color: colors.text }]}
+                >
                   あらゆる学びをサポート
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.attachmentActionButton}>
-                <Ionicons name='image' size={24} color='#fff' />
-                <Text style={styles.attachmentActionText}>画像を作成する</Text>
+                <Ionicons name='image' size={24} color={colors.text} />
+                <Text
+                  style={[styles.attachmentActionText, { color: colors.text }]}
+                >
+                  画像を作成する
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
