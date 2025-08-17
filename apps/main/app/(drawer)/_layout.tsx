@@ -1,4 +1,3 @@
-import React from 'react';
 import { Drawer } from 'expo-router/drawer';
 import { Dimensions, Keyboard } from 'react-native';
 import DrawerContent from './drawer-content';

@@ -1,20 +1,20 @@
-import React, { useState, useRef } from 'react';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { Stack } from 'expo-router';
+import { useRef, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
   SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Modal,
+  View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { Stack } from 'expo-router';
-import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { postJson } from '../../src/lib/request';
 
 interface Message {
@@ -105,7 +105,7 @@ export default function ChatScreen() {
         <ScrollView
           style={styles.messagesContainer}
           keyboardShouldPersistTaps='handled'
-          contentContainerStyle={{ paddingBottom: 16 }}
+          contentContainerStyle={styles.messagesContent}
         >
           {messages.length === 0 && (
             <View style={styles.suggestionsContainer}>
@@ -244,7 +244,7 @@ export default function ChatScreen() {
                   timestamp: new Date(),
                 };
                 setMessages((prev) => [...prev, assistantMessage]);
-              } catch (e) {
+              } catch (_e) {
                 const errorReply: Message = {
                   id: (Date.now() + 3).toString(),
                   text: 'ネットワークに問題があります。時間をおいて再試行してください。',
@@ -384,6 +384,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   messagesContainer: { flex: 1 },
+  messagesContent: { paddingBottom: 16 },
   suggestionsContainer: { padding: 16, gap: 12 },
   suggestionCard: {
     backgroundColor: '#0f0f0f',
