@@ -21,7 +21,7 @@
       "quoteStyle": "single",
       "jsxQuoteStyle": "single",
       "trailingCommas": "es5",
-      "semicolons": "asNeeded"
+      "semicolons": "always"
     }
   }
 }
