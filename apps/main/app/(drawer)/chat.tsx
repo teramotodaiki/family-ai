@@ -126,10 +126,7 @@ export default function ChatScreen() {
               ];
 
               const data: ChatCompletionsResponse = await createChatCompletion({
-                model: 'gpt-4o-mini',
                 messages: openAiMessages,
-                max_tokens: 256,
-                temperature: 0.7,
               });
 
               const content = (

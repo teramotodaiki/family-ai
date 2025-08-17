@@ -4,10 +4,7 @@ export type ChatMessage = {
 };
 
 export type ChatCompletionsRequest = {
-  model: string;
   messages: ChatMessage[];
-  max_tokens?: number;
-  temperature?: number;
 };
 
 export type ChatCompletionsResponse = {

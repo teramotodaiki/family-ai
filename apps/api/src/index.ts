@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 
 type Bindings = {
   OPENAI_API_KEY: string;
@@ -7,17 +8,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Minimal CORS without external deps
-app.use('*', async (c, next) => {
-  if (c.req.method === 'OPTIONS') {
-    return c.body(null, 204, {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    });
-  }
-  await next();
-  c.res.headers.set('Access-Control-Allow-Origin', '*');
-});
+app.use('*', cors());
 
 app.get('/', (c) => c.text('OK'));
 
@@ -25,12 +16,20 @@ app.post('/v1/chat/completions', async (c) => {
   const apiKey = c.env.OPENAI_API_KEY;
   if (!apiKey) return c.json({ error: 'Server misconfigured' }, 500);
 
-  let body: unknown;
+  let body: {
+    messages?: { role: string; content: string }[];
+  };
   try {
     body = await c.req.json();
   } catch {
     return c.json({ error: 'Invalid JSON' }, 400);
   }
+
+  const payload = {
+    model: 'gpt-5-mini',
+    messages: body.messages,
+    max_completion_tokens: 2000
+  };
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -38,7 +37,7 @@ app.post('/v1/chat/completions', async (c) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
 
   return new Response(res.body, {
