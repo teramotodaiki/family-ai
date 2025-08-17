@@ -23,7 +23,7 @@
 - シミュレータが開かない: `open -a Simulator` を実行してから再度 `npx expo run:ios`
 - Pod 関連エラー（Dev Build 時）: `cd apps/main/ios && pod install` 後に再実行
 - 依存解決が不安定: ルートで `rm -rf node_modules package-lock.json && npm install`
- - Worklets/初期化エラー: 依存を追加・変更した場合は Dev Client を再ビルド（`npx expo run:ios`）
+- Worklets/初期化エラー: 依存を追加・変更した場合は Dev Client を再ビルド（`npx expo run:ios`）
 
 ## メモ
 
