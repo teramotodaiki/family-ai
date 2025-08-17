@@ -9,9 +9,12 @@
     "dev": "turbo run dev",
     "dev:main": "turbo run dev --filter=main",
     "build": "turbo run build",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "format": "biome format --write .",
+    "test:format": "biome format ."
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.0",
     "turbo": "2.5.5"
   },
   "packageManager": "npm@10.0.0"
