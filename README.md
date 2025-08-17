@@ -60,9 +60,7 @@
 - Dev Client 準備（初回のみ）:
   - `cd apps/main && npx expo run:ios --no-bundler -d "iPhone 15"`
   - バンドラ起動: 別ターミナルで `npx expo start --dev-client`
-- テスト実行:
-  - ルート: `npm run e2e:main`（= `maestro test apps/main/maestro/flows/...`）
-  - もしくは `cd apps/main && npm run e2e`
+- テスト実行: `cd apps/main && npm run e2e`
 - 任意の環境変数: `EXPO_PUBLIC_OPENAI_API_KEY`（未設定でも基本シナリオは動作）
 - トラブル時:
   - `expo-linking` 関連で失敗する場合は `cd apps/main && npx expo install expo-linking && npx expo run:ios --no-bundler -d "iPhone 15"`
