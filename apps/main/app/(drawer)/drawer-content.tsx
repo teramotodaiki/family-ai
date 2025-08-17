@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,30 +7,30 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-} from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { useRouter } from 'expo-router'
-import type { DrawerContentComponentProps } from '@react-navigation/drawer'
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 
 interface Conversation {
-  id: string
-  title: string
-  timestamp: string
+  id: string;
+  title: string;
+  timestamp: string;
 }
 
 export default function DrawerContent({
   navigation,
 }: DrawerContentComponentProps) {
-  const router = useRouter()
-  const [searchText, setSearchText] = useState('')
+  const router = useRouter();
+  const [searchText, setSearchText] = useState('');
   const [conversations] = useState<Conversation[]>([
     { id: '1', title: 'サポート問い合わせ方法', timestamp: '今日' },
     { id: '2', title: 'md2sb ツールの紹介', timestamp: '今日' },
     { id: '3', title: 'Vercel AI SDK v5更新', timestamp: '昨日' },
     { id: '4', title: 'Claude Code 背景実行', timestamp: '昨日' },
-  ])
+  ]);
 
-  const user = { name: 'Daiki Teramoto', email: '個人アカウント' }
+  const user = { name: 'Daiki Teramoto', email: '個人アカウント' };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,8 +59,8 @@ export default function DrawerContent({
             key={conversation.id}
             style={styles.conversationItem}
             onPress={() => {
-              router.push('/chat')
-              navigation.closeDrawer()
+              router.push('/chat');
+              navigation.closeDrawer();
             }}
           >
             <Text style={styles.conversationTitle}>{conversation.title}</Text>
@@ -83,7 +83,7 @@ export default function DrawerContent({
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
   userDetails: { flex: 1 },
   userName: { color: '#fff', fontSize: 16, fontWeight: '500' },
   userEmail: { color: '#666', fontSize: 14, marginTop: 2 },
-})
+});

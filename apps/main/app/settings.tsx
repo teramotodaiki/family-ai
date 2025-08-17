@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,22 +7,22 @@ import {
   TouchableOpacity,
   ScrollView,
   Switch,
-} from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { Stack } from 'expo-router'
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Stack } from 'expo-router';
 
 interface SettingItem {
-  id: string
-  icon: string
-  title: string
-  value?: string
-  hasArrow?: boolean
-  hasSwitch?: boolean
-  switchValue?: boolean
+  id: string;
+  icon: string;
+  title: string;
+  value?: string;
+  hasArrow?: boolean;
+  hasSwitch?: boolean;
+  switchValue?: boolean;
 }
 
 export default function SettingsScreen() {
-  const [voiceEnabled, setVoiceEnabled] = useState(true)
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
 
   const accountSettings: SettingItem[] = [
     {
@@ -53,7 +53,7 @@ export default function SettingsScreen() {
       value: 'ChatGPT Plus',
       hasArrow: false,
     },
-  ]
+  ];
 
   const appSettings: SettingItem[] = [
     {
@@ -81,7 +81,7 @@ export default function SettingsScreen() {
       hasArrow: true,
     },
     { id: 'security', icon: 'shield', title: 'セキュリティ', hasArrow: true },
-  ]
+  ];
 
   const otherSettings: SettingItem[] = [
     {
@@ -105,7 +105,7 @@ export default function SettingsScreen() {
       value: 'システム',
       hasArrow: true,
     },
-  ]
+  ];
 
   const renderSettingItem = (
     item: SettingItem,
@@ -114,7 +114,7 @@ export default function SettingsScreen() {
     <TouchableOpacity key={item.id} style={styles.settingItem}>
       <View style={styles.settingItemLeft}>
         <Ionicons
-          name={item.icon as any}
+          name={item.icon}
           size={24}
           color='#666'
           style={styles.settingIcon}
@@ -136,7 +136,7 @@ export default function SettingsScreen() {
         )}
       </View>
     </TouchableOpacity>
-  )
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -194,7 +194,7 @@ export default function SettingsScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -266,4 +266,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 4,
   },
-})
+});

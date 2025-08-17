@@ -1,6 +1,6 @@
-import React from 'react'
-import { Redirect } from 'expo-router'
+import React from 'react';
+import { Redirect } from 'expo-router';
 
 export default function IndexScreen() {
-  return <Redirect href='/chat' />
+  return <Redirect href='/chat' />;
 }

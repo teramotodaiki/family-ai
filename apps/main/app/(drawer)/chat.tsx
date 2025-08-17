@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,42 +10,42 @@ import {
   Platform,
   ScrollView,
   Modal,
-} from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { Stack } from 'expo-router'
-import { useNavigation, DrawerActions } from '@react-navigation/native'
-import { postJson } from '../../src/lib/request'
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Stack } from 'expo-router';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
+import { postJson } from '../../src/lib/request';
 
 interface Message {
-  id: string
-  text: string
-  isUser: boolean
-  timestamp: Date
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
 }
 
 interface Suggestion {
-  id: string
-  text: string
-  subtext: string
+  id: string;
+  text: string;
+  subtext: string;
 }
 
 export default function ChatScreen() {
-  const insets = useSafeAreaInsets()
-  const navigation = useNavigation()
-  const [inputText, setInputText] = useState('')
-  const [messages, setMessages] = useState<Message[]>([])
-  const [modelModalVisible, setModelModalVisible] = useState(false)
-  const [selectedModel, setSelectedModel] = useState('GPT-5')
-  const [showAttachmentOptions, setShowAttachmentOptions] = useState(false)
-  const [sending, setSending] = useState(false)
-  const emailRef = useRef<TextInput>(null)
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
+  const [inputText, setInputText] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [modelModalVisible, setModelModalVisible] = useState(false);
+  const [selectedModel, setSelectedModel] = useState('GPT-5');
+  const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
+  const [sending, setSending] = useState(false);
+  const emailRef = useRef<TextInput>(null);
 
   const suggestions: Suggestion[] = [
     { id: '1', text: 'Explain MCP', subtext: 'structured content' },
     { id: '2', text: 'Explore AI', subtext: 'agent frameworks' },
     { id: '3', text: 'Summary', subtext: 'AI research' },
-  ]
+  ];
 
   const models = [
     { id: 'gpt5', name: 'GPT-5', description: 'フラッグシップモデル' },
@@ -54,13 +54,13 @@ export default function ChatScreen() {
       name: 'GPT-5 Thinking',
       description: 'より深い回答を得る',
     },
-  ]
+  ];
 
   const attachmentOptions = [
     { id: 'photo', label: '写真', icon: 'camera' },
     { id: 'file', label: '', icon: 'circle' },
     { id: 'code', label: 'すべてを表示する', icon: 'list' },
-  ]
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,9 +77,9 @@ export default function ChatScreen() {
             onPress={() => {
               // In expo-router, the Drawer is a parent navigator of this screen
               // Ensure we dispatch the action on the parent (Drawer) navigator
-              const parent = (navigation as any).getParent?.()
+              const parent = navigation.getParent?.();
               if (parent) {
-                parent.dispatch(DrawerActions.openDrawer())
+                parent.dispatch(DrawerActions.openDrawer());
               }
             }}
             style={styles.headerButton}
@@ -169,33 +169,33 @@ export default function ChatScreen() {
             accessibilityLabel='send-button'
             disabled={sending || !inputText.trim()}
             onPress={async () => {
-              const text = inputText.trim()
-              if (!text || sending) return
+              const text = inputText.trim();
+              if (!text || sending) return;
 
               const userMessage: Message = {
                 id: Date.now().toString(),
                 text,
                 isUser: true,
                 timestamp: new Date(),
-              }
+              };
 
-              const nextMessages = [...messages, userMessage]
-              setMessages(nextMessages)
-              setInputText('')
+              const nextMessages = [...messages, userMessage];
+              setMessages(nextMessages);
+              setInputText('');
 
-              const apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY
+              const apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
               if (!apiKey) {
                 const errorReply: Message = {
                   id: (Date.now() + 1).toString(),
                   text: 'APIキーが設定されていません。EXPO_PUBLIC_OPENAI_API_KEY を設定してください。',
                   isUser: false,
                   timestamp: new Date(),
-                }
-                setMessages((prev) => [...prev, errorReply])
-                return
+                };
+                setMessages((prev) => [...prev, errorReply]);
+                return;
               }
 
-              setSending(true)
+              setSending(true);
               try {
                 const openAiMessages = [
                   {
@@ -207,18 +207,18 @@ export default function ChatScreen() {
                     role: m.isUser ? 'user' : 'assistant',
                     content: m.text,
                   })),
-                ]
+                ];
 
                 type ChatCompletionResponse = {
-                  choices?: { message?: { content?: string } }[]
-                }
+                  choices?: { message?: { content?: string } }[];
+                };
 
                 const data = await postJson<
                   {
-                    model: string
-                    messages: { role: string; content: string }[]
-                    max_tokens: number
-                    temperature: number
+                    model: string;
+                    messages: { role: string; content: string }[];
+                    max_tokens: number;
+                    temperature: number;
                   },
                   ChatCompletionResponse
                 >(
@@ -232,28 +232,28 @@ export default function ChatScreen() {
                   {
                     Authorization: `Bearer ${apiKey}`,
                   }
-                )
+                );
 
                 const content = (
                   data.choices?.[0]?.message?.content || ''
-                ).trim()
+                ).trim();
                 const assistantMessage: Message = {
                   id: (Date.now() + 2).toString(),
                   text: content || '…',
                   isUser: false,
                   timestamp: new Date(),
-                }
-                setMessages((prev) => [...prev, assistantMessage])
+                };
+                setMessages((prev) => [...prev, assistantMessage]);
               } catch (e) {
                 const errorReply: Message = {
                   id: (Date.now() + 3).toString(),
                   text: 'ネットワークに問題があります。時間をおいて再試行してください。',
                   isUser: false,
                   timestamp: new Date(),
-                }
-                setMessages((prev) => [...prev, errorReply])
+                };
+                setMessages((prev) => [...prev, errorReply]);
               } finally {
-                setSending(false)
+                setSending(false);
               }
             }}
           >
@@ -280,8 +280,8 @@ export default function ChatScreen() {
                   key={model.id}
                   style={styles.modelOption}
                   onPress={() => {
-                    setSelectedModel(model.name)
-                    setModelModalVisible(false)
+                    setSelectedModel(model.name);
+                    setModelModalVisible(false);
                   }}
                 >
                   <View style={styles.modelInfo}>
@@ -354,7 +354,7 @@ export default function ChatScreen() {
         )}
       </KeyboardAvoidingView>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -496,4 +496,4 @@ const styles = StyleSheet.create({
   modelInfo: { flex: 1 },
   modelName: { color: '#fff', fontSize: 16, fontWeight: '500' },
   modelDescription: { color: '#666', fontSize: 14, marginTop: 2 },
-})
+});

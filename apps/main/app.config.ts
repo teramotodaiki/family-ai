@@ -1,4 +1,4 @@
-import type { ExpoConfig } from '@expo/config'
+import type { ExpoConfig } from '@expo/config';
 
 const config: ExpoConfig = {
   name: 'main',
@@ -40,6 +40,6 @@ const config: ExpoConfig = {
   },
   experiments: { typedRoutes: true },
   plugins: ['expo-router'],
-}
+};
 
-export default config
+export default config;

@@ -1,9 +1,9 @@
 export type HttpError = {
-  name: 'HttpError'
-  message: string
-  status: number
-  body?: string
-}
+  name: 'HttpError';
+  message: string;
+  status: number;
+  body?: string;
+};
 
 export async function postJson<TReq, TRes>(
   url: string,
@@ -17,30 +17,30 @@ export async function postJson<TReq, TRes>(
       ...headers,
     },
     body: JSON.stringify(body),
-  })
+  });
 
   if (!res.ok) {
-    const text = await safeReadText(res)
+    const text = await safeReadText(res);
     const err: HttpError = {
       name: 'HttpError',
       message: `HTTP ${res.status}: ${truncate(text, 500)}`,
       status: res.status,
       body: text,
-    }
-    throw err
+    };
+    throw err;
   }
 
-  return (await res.json()) as TRes
+  return (await res.json()) as TRes;
 }
 
 async function safeReadText(res: Response): Promise<string> {
   try {
-    return await res.text()
+    return await res.text();
   } catch {
-    return ''
+    return '';
   }
 }
 
 function truncate(s: string, max: number): string {
-  return s.length > max ? s.slice(0, max) + '…' : s
+  return s.length > max ? s.slice(0, max) + '…' : s;
 }

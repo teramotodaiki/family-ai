@@ -1,8 +1,8 @@
-import React from 'react'
-import { Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import React from 'react';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Layout() {
   return (
@@ -23,5 +23,5 @@ export default function Layout() {
         </Stack>
       </GestureHandlerRootView>
     </SafeAreaProvider>
-  )
+  );
 }
