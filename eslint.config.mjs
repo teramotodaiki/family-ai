@@ -1,10 +1,8 @@
 import js from '@eslint/js'
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import reactNativePlugin from 'eslint-plugin-react-native'
-import expoPlugin from 'eslint-plugin-expo'
 import importPlugin from 'eslint-plugin-import'
 
 export default [
@@ -33,11 +31,9 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': typescriptEslint,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
       'react-native': reactNativePlugin,
-      expo: expoPlugin,
       import: importPlugin,
     },
     rules: {
@@ -61,8 +57,6 @@ export default [
       // '@typescript-eslint/no-explicit-any' → covered by Biome
 
       // React rules
-      'react/jsx-uses-react': 'error',
-      'react/jsx-uses-vars': 'error',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
@@ -106,8 +100,6 @@ export default [
         },
       ],
 
-      // Expo specific rules (if available)
-      // Note: Some expo rules might not be available in current version
     },
     settings: {
       react: {
@@ -142,6 +134,7 @@ export default [
       'android/**',
       '**/*.generated.*',
       'coverage/**',
+      '.claude/**',
     ],
   },
 ]
