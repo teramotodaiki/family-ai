@@ -48,8 +48,11 @@
   - `cd apps/main && npx expo run:ios --configuration Release --device <UDID>`
 - EAS Dev Build（内部配布・開発用）:
   - `cd apps/main && eas build -p ios --profile development`
- - EAS Production Build（TestFlight / Store 提出）:
-   - `cd apps/main && eas build -p ios --profile production`
+- EAS Production Build（TestFlight / Store 提出）:
+  - `cd apps/main && eas build -p ios --profile production`
+- TestFlight 提出（プロンプト最小化設定済み）:
+  - `cd apps/main && eas submit -p ios --latest --profile production`
+  - 補足: `apps/main/eas.json` は `appVersionSource: "remote"` と `submit.production.ios.ascAppId` を設定済み
 
 ## E2E（Maestro）
 
