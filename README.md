@@ -48,8 +48,21 @@
   - `cd apps/main && npx expo run:ios --configuration Release --device <UDID>`
 - EAS Dev Build（内部配布・開発用）:
   - `cd apps/main && eas build -p ios --profile development`
-- EAS Production Build（TestFlight / Store 提出）:
-  - `cd apps/main && eas build -p ios --profile production`
+ - EAS Production Build（TestFlight / Store 提出）:
+   - `cd apps/main && eas build -p ios --profile production`
+
+## E2E（Maestro）
+
+- 前提: `brew install maestro`（macOS）、iOS シミュレータ（例: iPhone 15）、Dev Client 使用
+- Dev Client 準備（初回のみ）:
+  - `cd apps/main && npx expo run:ios --no-bundler -d "iPhone 15"`
+  - バンドラ起動: 別ターミナルで `npx expo start --dev-client`
+- テスト実行:
+  - ルート: `npm run e2e:main`（= `maestro test apps/main/maestro/flows/...`）
+  - もしくは `cd apps/main && npm run e2e`
+- 任意の環境変数: `EXPO_PUBLIC_OPENAI_API_KEY`（未設定でも基本シナリオは動作）
+- トラブル時:
+  - `expo-linking` 関連で失敗する場合は `cd apps/main && npx expo install expo-linking && npx expo run:ios --no-bundler -d "iPhone 15"`
 
 ## 実装メモ（ナビゲーション）
 

@@ -1,0 +1,43 @@
+appId: ${APP_ID}
+name: Chat BUNDLE flow (pre-bundled app)
+tags:
+  - e2e
+  - chat
+env:
+  INPUT_TEXT: "こんにちは"
+onFlowStart:
+  - stopApp: {}
+  - clearState: {}
+  - launchApp:
+      appId: ${APP_ID}
+      clearState: true
+      permissions:
+        notifications: allow
+        camera: deny
+        photos: deny
+        microphone: deny
+---
+ # バンドル同梱ビルド前提（Dev Client ランチャーは使わない）
+ - extendedWaitUntil:
+     visible:
+       id: "chat-input"
+     timeout: 60000
+
+ - tapOn:
+     id: "chat-input"
+
+ - inputText: ${INPUT_TEXT}
+
+ - hideKeyboard: {}
+
+ - tapOn:
+     id: "send-button"
+
+ - extendedWaitUntil:
+     visible:
+       id: "message-assistant"
+     timeout: 30000
+
+ # 最低限、アシスタントの吹き出し（チャットバブル）があること
+ - assertVisible:
+     id: "message-assistant"
