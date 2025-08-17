@@ -8,11 +8,14 @@
     "android": "expo run:android --device",
     "ios": "expo run:ios --device",
     "web": "expo start --web",
+    "build:dev:ios": "eas build --profile development --platform ios",
+    "build:dev:android": "eas build --profile development --platform android",
     "e2e": "maestro test -e APP_ID=com.familyai.main maestro/flows/chat-send.yaml"
   },
   "dependencies": {
     "@expo/vector-icons": "14.1.0",
     "@family/ui": "file:../../packages/ui",
+    "@family/core": "file:../../packages/core",
     "expo": "53.0.20",
     "expo-dev-client": "~5.2.4",
     "expo-linking": "~7.1.7",

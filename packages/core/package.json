@@ -1,0 +1,19 @@
+{
+  "name": "@family/core",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -w -p tsconfig.json",
+    "clean": "rimraf dist || true"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3",
+    "rimraf": "6.0.1"
+  }
+}

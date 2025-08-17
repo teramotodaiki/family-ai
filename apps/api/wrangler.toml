@@ -1,0 +1,10 @@
+name = "family-ai-api"
+main = "src/index.ts"
+compatibility_date = "2024-08-01"
+
+[observability]
+enabled = true
+
+[vars]
+# no vars here; OPENAI_API_KEY is provided via secrets or .dev.vars
+

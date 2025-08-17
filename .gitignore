@@ -86,3 +86,28 @@ typings/
 # Ignore generated native projects for Expo Managed
 apps/main/ios/
 apps/main/android/
+
+# Cloudflare Workers local secrets
+apps/api/.dev.vars
+
+# macOS
+.DS_Store
+
+# Env files in any package/app
+**/.env
+**/.env.*
+!.env.example
+
+# Expo cache/state
+**/.expo/
+
+# Build outputs
+apps/**/dist/
+packages/**/dist/
+
+# Cloudflare wrangler local state
+apps/api/.wrangler/
+.wrangler/
+
+# npm config (contains tokens)
+.npmrc

@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --ui=tui",
     "dev:main": "turbo run dev --filter=main",
     "build": "turbo run build",
     "clean": "turbo run clean",

@@ -1,3 +1,4 @@
+import type { ChatCompletionsResponse } from '@family/core';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { useState } from 'react';
@@ -15,7 +16,7 @@ import ChatInputBar from '../../src/components/chat/chat-input-bar';
 import ChatMessages from '../../src/components/chat/chat-messages';
 import ChatModelModal from '../../src/components/chat/chat-model-modal';
 import ChatSuggestions from '../../src/components/chat/chat-suggestions';
-import { postJson } from '../../src/lib/request';
+import { createChatCompletion } from '../../src/lib/api';
 import { useTheme } from '../../src/theme';
 import type { Message, Model, Suggestion } from '../../src/types/chat';
 
@@ -110,18 +111,6 @@ export default function ChatScreen() {
             setMessages(nextMessages);
             setInputText('');
 
-            const apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
-            if (!apiKey) {
-              const errorReply: Message = {
-                id: (Date.now() + 1).toString(),
-                text: 'APIキーが設定されていません。EXPO_PUBLIC_OPENAI_API_KEY を設定してください。',
-                isUser: false,
-                timestamp: new Date(),
-              };
-              setMessages((prev) => [...prev, errorReply]);
-              return;
-            }
-
             setSending(true);
             try {
               const openAiMessages = [
@@ -136,28 +125,12 @@ export default function ChatScreen() {
                 })),
               ];
 
-              type ChatCompletionResponse = {
-                choices?: { message?: { content?: string } }[];
-              };
-
-              const data = await postJson<
-                {
-                  model: string;
-                  messages: { role: string; content: string }[];
-                  max_tokens: number;
-                  temperature: number;
-                },
-                ChatCompletionResponse
-              >(
-                'https://api.openai.com/v1/chat/completions',
-                {
-                  model: 'gpt-4o-mini',
-                  messages: openAiMessages,
-                  max_tokens: 256,
-                  temperature: 0.7,
-                },
-                { Authorization: `Bearer ${apiKey}` }
-              );
+              const data: ChatCompletionsResponse = await createChatCompletion({
+                model: 'gpt-4o-mini',
+                messages: openAiMessages,
+                max_tokens: 256,
+                temperature: 0.7,
+              });
 
               const content = (
                 data.choices?.[0]?.message?.content || ''
