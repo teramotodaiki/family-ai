@@ -1,11 +1,11 @@
-import React from 'react';
-import { Drawer } from 'expo-router/drawer';
-import { Dimensions, Keyboard } from 'react-native';
-import DrawerContent from './drawer-content';
+import React from 'react'
+import { Drawer } from 'expo-router/drawer'
+import { Dimensions, Keyboard } from 'react-native'
+import DrawerContent from './drawer-content'
 
 export default function DrawerLayout() {
-  const { width } = Dimensions.get('window');
-  const DRAWER_WIDTH = Math.min(Math.round(width * 0.86), 360);
+  const { width } = Dimensions.get('window')
+  const DRAWER_WIDTH = Math.min(Math.round(width * 0.86), 360)
 
   return (
     <Drawer
@@ -23,6 +23,5 @@ export default function DrawerLayout() {
         drawerOpen: () => Keyboard.dismiss(),
       }}
     />
-  );
+  )
 }
-

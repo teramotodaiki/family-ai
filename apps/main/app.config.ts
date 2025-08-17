@@ -1,4 +1,4 @@
-import type { ExpoConfig } from '@expo/config';
+import type { ExpoConfig } from '@expo/config'
 
 const config: ExpoConfig = {
   name: 'main',
@@ -13,7 +13,7 @@ const config: ExpoConfig = {
   splash: {
     image: './assets/splash-icon.png',
     resizeMode: 'contain',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
   },
   ios: {
     supportsTablet: true,
@@ -26,20 +26,20 @@ const config: ExpoConfig = {
     package: 'com.familyai.main',
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
     },
-    edgeToEdgeEnabled: true
+    edgeToEdgeEnabled: true,
   },
   web: {
-    favicon: './assets/favicon.png'
+    favicon: './assets/favicon.png',
   },
   extra: {
     eas: {
-      projectId: 'b7e6d4fd-fdd5-4b4b-9d6e-fa483887dee5'
-    }
+      projectId: 'b7e6d4fd-fdd5-4b4b-9d6e-fa483887dee5',
+    },
   },
   experiments: { typedRoutes: true },
-  plugins: ['expo-router']
-};
+  plugins: ['expo-router'],
+}
 
-export default config;
+export default config
