@@ -11,10 +11,22 @@
     "build": "turbo run build",
     "clean": "turbo run clean",
     "format": "biome format --write .",
-    "test:format": "biome format ."
+    "test:format": "biome format .",
+    "lint": "npm run lint:eslint && npm run lint:biome",
+    "lint:eslint": "eslint .",
+    "lint:biome": "biome check ."
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
+    "@typescript-eslint/eslint-plugin": "8.39.1",
+    "@typescript-eslint/parser": "8.39.1",
+    "eslint": "9.33.0",
+    "eslint-import-resolver-typescript": "4.4.4",
+    "eslint-plugin-expo": "0.1.4",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-native": "5.0.0",
     "turbo": "2.5.5"
   },
   "packageManager": "npm@10.0.0"

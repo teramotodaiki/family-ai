@@ -90,10 +90,17 @@ packages/
 - 依存追加時は package.json の変更とインストール手順を必ず含める。
 - EAS のビルド/サブミットは `apps/main` で実行し、`apps/main/eas.json` を参照する運用とする。
 
+## Lint 方針
+
+- タスクを完了する前に必ず lint を行う（ESLint と Biome の両方）。
+- Biome で可能なことは Biome で行う（フォーマット、基本的な静的解析）。
+- どうしても ESLint でしかできないことがあれば、ESLint で行う（React Native 特有のルール、monorepo のインポート制限など）。
+- Biome と ESLint で内容がかぶるチェックを行わないよう気をつける。
+
 ## 実装品質チェックリスト
 
 - 型エラーがゼロである。
-- ESLint と Prettier が通過する。
+- ESLint と Biome が通過する。
 - iOS 実機と iOS シミュレータで起動し、トップ画面が 1 秒以内に表示される。
 - 新規依存が導入された場合、根拠を PR に記述する。
 
