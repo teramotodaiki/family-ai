@@ -109,5 +109,3 @@ packages/**/dist/
 apps/api/.wrangler/
 .wrangler/
 
-# npm config (contains tokens)
-.npmrc
