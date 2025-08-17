@@ -1,0 +1,31 @@
+name: EAS iOS Build and Submit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install EAS CLI
+        run: |
+          npm i -g eas-cli
+
+      - name: Install deps (root)
+        run: |
+          npm ci
+
+      - name: iOS Production Build & Auto-Submit (EAS)
+        working-directory: apps/main
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas build -p ios --profile production --non-interactive --auto-submit
