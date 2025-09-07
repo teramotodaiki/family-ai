@@ -27,7 +27,8 @@ jobs:
 
       - name: Setup iOS Simulator
         run: |
-          xcrun simctl create "iPhone 15" "iPhone 15" "iOS17.5"
+          xcrun simctl list runtimes
+          xcrun simctl create "iPhone 15" "iPhone 15" "iOS-17-5"
           xcrun simctl boot "iPhone 15"
 
       - name: Install EAS CLI
