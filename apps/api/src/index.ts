@@ -28,7 +28,7 @@ app.post('/v1/chat/completions', async (c) => {
   const payload = {
     model: 'gpt-5-mini',
     messages: body.messages,
-    max_completion_tokens: 2000
+    max_completion_tokens: 2000,
   };
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
