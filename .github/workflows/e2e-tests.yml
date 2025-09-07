@@ -34,18 +34,12 @@ jobs:
       - name: Install EAS CLI
         run: npm i -g eas-cli
 
-      - name: Build Dev Client
+      - name: Build and Install App
         working-directory: apps/main
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          npx expo run:ios --no-bundler -d "iPhone 15"
-
-      - name: Start Metro bundler
-        working-directory: apps/main
-        run: |
-          npx expo start --dev-client &
-          sleep 30
+          npx expo run:ios -d "iPhone 15"
 
       - name: Run E2E tests
         working-directory: apps/main
