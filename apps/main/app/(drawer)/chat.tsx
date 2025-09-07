@@ -1,7 +1,7 @@
 import type { ChatCompletionsResponse } from '@family/core';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -17,6 +17,7 @@ import ChatMessages from '../../src/components/chat/chat-messages';
 import ChatModelModal from '../../src/components/chat/chat-model-modal';
 import ChatSuggestions from '../../src/components/chat/chat-suggestions';
 import { createChatCompletion } from '../../src/lib/api';
+import { loadMessages, saveMessages } from '../../src/lib/conversation-storage';
 import { useTheme } from '../../src/theme';
 import type { Message, Model, Suggestion } from '../../src/types/chat';
 
@@ -31,6 +32,19 @@ export default function ChatScreen() {
   const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
   const [sending, setSending] = useState(false);
   const sendIconColor = theme === 'dark' ? '#000' : '#fff';
+
+  useEffect(() => {
+    (async () => {
+      const stored = await loadMessages();
+      setMessages(stored);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await saveMessages(messages);
+    })();
+  }, [messages]);
 
   const suggestions: Suggestion[] = [
     { id: '1', text: 'Explain MCP', subtext: 'structured content' },
