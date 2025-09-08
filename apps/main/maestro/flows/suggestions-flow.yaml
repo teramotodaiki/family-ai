@@ -1,0 +1,96 @@
+appId: ${APP_ID}
+name: Suggestions Flow
+tags:
+  - e2e
+  - suggestions
+env:
+  APP_SCHEME: "familyai"
+  DEV_URL: "http://192.168.68.53:8081"
+onFlowStart:
+  - stopApp: {}
+  - clearState: {}
+  - launchApp:
+      appId: ${APP_ID}
+      clearState: true
+      permissions:
+        notifications: allow
+        camera: deny
+        photos: deny
+        microphone: deny
+---
+ - openLink:
+     link: "${APP_SCHEME}://expo-development-client/?url=${DEV_URL}"
+
+ - tapOn:
+     text: "開く"
+     optional: true
+ - tapOn:
+     text: "Open"
+     optional: true
+
+ # 初回のみ表示されるモーダル等（任意）
+ - tapOn:
+     text: "Continue"
+     optional: true
+ - tapOn:
+     text: "×"
+     optional: true
+
+ # ランチャー画面フォールバック（任意）
+ - tapOn:
+     text: "${DEV_URL}"
+     optional: true
+ - tapOn:
+     text: "localhost:8081"
+     optional: true
+ - tapOn:
+     text: "192.168.68.53:8081"
+     optional: true
+ - tapOn:
+     text: "http://192.168.68.53:8081"
+     optional: true
+
+ # Dev Menu が開いている場合に閉じる（任意・文言差吸収）
+ - tapOn:
+     text: "Go home"
+     optional: true
+ - tapOn:
+     text: "ホームに戻る"
+     optional: true
+ - tapOn:
+     text: "Close"
+     optional: true
+ - tapOn:
+     text: "閉じる"
+     optional: true
+
+ - extendedWaitUntil:
+     visible:
+       id: "chat-input"
+     timeout: 90000
+
+ - assertVisible:
+     text: "Explain MCP"
+ - assertVisible:
+     text: "Explore AI"
+ - assertVisible:
+     text: "Summary"
+
+ - tapOn:
+     text: "Explain MCP"
+
+ - assertVisible:
+     id: "chat-input"
+
+ - tapOn:
+     id: "send-button"
+
+ - extendedWaitUntil:
+     visible:
+       id: "message-user"
+     timeout: 10000
+
+ - extendedWaitUntil:
+     notVisible:
+       text: "Explain MCP"
+     timeout: 5000

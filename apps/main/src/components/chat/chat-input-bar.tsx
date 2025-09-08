@@ -33,6 +33,7 @@ export default function ChatInputBar({
       <TouchableOpacity
         style={[styles.attachButton, { backgroundColor: colors.inputBg }]}
         onPress={onToggleAttachments}
+        testID='attachment-button'
       >
         <Ionicons name='add' size={28} color={colors.text} />
       </TouchableOpacity>
