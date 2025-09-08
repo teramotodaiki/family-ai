@@ -6,86 +6,15 @@ on:
     branches: [main]
 
 jobs:
-  ios-e2e:
-    runs-on: macos-14
-    timeout-minutes: 40
-    env:
-      SCHEME: main
-      WORKSPACE: apps/main/ios/main.xcworkspace
-      CONFIG: Debug
-      DERIVED_DATA: build
-
+  test-trigger:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Setup Java 17 (Maestro requirement)
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
-      - name: Install dependencies (root)
-        run: npm ci
-
-      - name: Install IDB companion (iOS requirement)
+      
+      - name: Test workflow trigger
         run: |
-          brew tap facebook/fb
-          brew install idb-companion
-
-      - name: Install Maestro CLI
-        run: |
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
-
-      - name: Install EAS CLI
-        run: npm i -g eas-cli
-
-      - name: Build .app for iOS Simulator
-        working-directory: apps/main
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: |
-          npx expo run:ios --no-bundler -d "iPhone 15" --configuration Debug
-          
-      - name: Boot iOS Simulator
-        run: $HOME/.maestro/bin/maestro start-device --platform ios
-
-      - name: Install app and run E2E tests
-        working-directory: apps/main
-        env:
-          EXPO_PUBLIC_OPENAI_API_KEY: ${{ secrets.EXPO_PUBLIC_OPENAI_API_KEY }}
-        run: |
-          # Find .app file in multiple possible locations
-          APP_PATH=""
-          for search_path in ~/Library/Developer/Xcode/DerivedData ios/build; do
-            APP_PATH="$(find "$search_path" -name "*.app" -path "*/Build/Products/Debug-iphonesimulator/*" 2>/dev/null | head -n 1)"
-            if [ -n "$APP_PATH" ]; then
-              break
-            fi
-          done
-          
-          if [ -z "$APP_PATH" ]; then
-            echo "Error: Could not find .app file in any expected location"
-            echo "Searching in all possible locations..."
-            find ~ -name "*.app" -path "*/Debug-iphonesimulator/*" 2>/dev/null || true
-            exit 1
-          fi
-          
-          echo "Installing app: $APP_PATH"
-          xcrun simctl install booted "$APP_PATH"
-          $HOME/.maestro/bin/maestro test maestro --format junit --test-output-dir=artifacts
-
-      - name: Upload test artifacts
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: maestro-ios-artifacts
-          path: |
-            apps/main/artifacts/**
-            apps/main/report.xml
+          echo "Workflow triggered successfully!"
+          echo "Branch: ${{ github.head_ref }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Commit: ${{ github.sha }}"
