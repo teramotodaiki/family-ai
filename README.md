@@ -57,6 +57,7 @@
 ## E2E（Maestro）
 
 - 前提: `brew install maestro`（macOS）、iOS シミュレータ（例: iPhone 15）、Dev Client 使用
+- CI: GitHub ActionsでE2Eテストが自動実行されます（PRとmanual trigger）
 - Dev Client 準備（初回のみ）:
   - `cd apps/main && npx expo run:ios --no-bundler -d "iPhone 15"`
   - バンドラ起動: 別ターミナルで `npx expo start --dev-client`
