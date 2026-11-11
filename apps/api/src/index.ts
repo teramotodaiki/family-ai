@@ -26,7 +26,9 @@ app.post('/v1/chat/completions', async (c) => {
   }
 
   const payload = {
-    model: 'gpt-5-mini',
+    model: 'gpt-5.6-terra',
+    // Keep short family conversations responsive and preserve the output budget.
+    reasoning_effort: 'none',
     messages: body.messages,
     max_completion_tokens: 2000,
   };

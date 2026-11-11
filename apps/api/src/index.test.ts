@@ -86,7 +86,8 @@ describe('API Routes', () => {
             Authorization: 'Bearer test-key',
           },
           body: JSON.stringify({
-            model: 'gpt-5-mini',
+            model: 'gpt-5.6-terra',
+            reasoning_effort: 'none',
             messages: [{ role: 'user', content: 'Hello' }],
             max_completion_tokens: 2000,
           }),
@@ -141,7 +142,8 @@ describe('API Routes', () => {
       const fetchCall = mockFetch.mock.calls[0];
       const requestBody = JSON.parse(fetchCall[1]?.body as string);
 
-      expect(requestBody.model).toBe('gpt-5-mini');
+      expect(requestBody.model).toBe('gpt-5.6-terra');
+      expect(requestBody.reasoning_effort).toBe('none');
       expect(requestBody.max_completion_tokens).toBe(2000);
       expect(requestBody.messages).toEqual([{ role: 'user', content: 'Test' }]);
     });
